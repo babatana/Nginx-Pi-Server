@@ -1,0 +1,9 @@
+---
+# SETTING UP AN NGINX WEB SERVER ON RASPI
+
+- hosts: localhost
+  tasks:
+
+  - name: Deleting any pre-existing Apache2
+    become: yes
+    state: 
