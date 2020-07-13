@@ -1,0 +1,17 @@
+# INSTALLING MYSQL
+
+# Install mysql server
+- name: "Install MSQL"
+  become: yes
+  apt:
+    name: mariadb-server
+
+
+- name: "Install the PHP MySQL Connector"
+  become: yes
+  apt:
+    name: php-mysql
+
+
+# Use the following site for steps to complete the setup
+# https://pimylifeup.com/raspberry-pi-mysql/

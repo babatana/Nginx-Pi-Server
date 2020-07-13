@@ -1,0 +1,37 @@
+# INSTALLING AND CONFIGURING NGINX WEB SERVER
+
+# update packages 
+
+- name: "Check for updates"
+  become: yes
+  shell: apt update 
+
+- name: "Upgrade packages"
+  become: yes
+  shell: apt upgrade
+
+
+
+# remove apache 
+
+- name: "Remove apache2, if present"
+  become: yes
+  apt: 
+    name: apache2
+    state: absent
+
+
+
+# installing an starting nginx web server 
+- name: "Install nginx"
+  become: yes
+  apt:
+    name: nginx
+    state: present
+
+- name: "Start nginx web server"
+  become: yes
+  systemd: 
+    name: nginx
+    state: started 
+

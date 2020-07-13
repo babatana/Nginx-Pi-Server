@@ -1,0 +1,57 @@
+# PHP INSTALLATION AND CONFIGURATION 
+
+# installing php packages
+
+- name: "Install necessary php packages"
+  become: yes
+  apt:
+    pkg:
+      - php7.3-fpm
+      - php7.3-mbstring
+      - php7.3-mysql
+      - php7.3-curl
+      - php7.3-gd
+      - php7.3-curl
+      - php7.3-zip
+      - php7.3-xml
+
+# configuring nginx to support php
+- name: "Configure /etc/nginx/sites-enabled/default to recognize php"  
+  become: yes
+  lineinfile:
+    path: /etc/nginx/sites-enabled/default
+    regexp: "{{ item.From }}"
+    line: "{{ item.To }}"
+  with_items:
+    - { From: "index index.html index.htm", To: "index index.php index.html index.htm"}
+
+
+- name: "Configuring /etc/nginx/sites-enabled/default some more"  
+  become: yes
+  blockinfile:
+    path: /etc/nginx/sites-enabled/default
+    insertafter: "#}"
+    block: |
+
+      location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+        }
+
+
+- name: "Reload nginx server"
+  become: yes 
+  shell: systemctl reload nginx
+
+
+- name: "Create index.php file"
+  become: yes
+  file:
+    path: /var/www/html/index.php
+    state: touch
+
+
+- name: "Add simple simple php code to index.php"
+  lineinfile:
+    path: /var/www/html/index.php
+    line: <?php phpinfo(); ?>
